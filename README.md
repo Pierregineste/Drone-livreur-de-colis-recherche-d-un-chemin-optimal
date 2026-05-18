@@ -1,47 +1,62 @@
-# Energy-Optimal Drone Delivery Routing / Drone livreur de colis recherche d'un chemin optimal
+# Energy-Optimal Drone Delivery Routing 🚁📦
 
-## 🇬🇧 English Version
+## English Version
 
-[cite_start]This repository contains the code and research for a CPGE MP TIPE (Travail d'Initiative Personnelle Encadrée)[cite: 7]. [cite_start]The project aims to find the most energy-efficient delivery route for a drone operating in an urban environment (Toulouse, France)[cite: 4, 45, 148].
+This repository contains the source code and research developed for a CPGE MP TIPE (Travail d'Initiative Personnelle Encadrée). The goal of this project is to determine the most energy-efficient route for a drone delivering multiple packages in an urban environment.
 
-### 🎯 Project Objectives
-[cite_start]The rise of urban delivery has led to increased pollution and traffic congestion caused by delivery trucks[cite: 5, 33]. [cite_start]Automated drone delivery presents an innovative alternative[cite: 6]. [cite_start]This project models a drone's energy consumption and determines the optimal sequence for delivering multiple packages to minimize energy usage[cite: 35, 45]. 
+> **Note on visuals and context:** For all diagrams, theoretical background, graphs of the city of Toulouse, and visual steps of the algorithms, please refer to the attached presentation and MCOT(french) documents.
 
-[cite_start]**Note on visuals:** For all diagrams, graphs, and illustrations regarding the physics model and algorithmic pathfinding, please refer to the attached [Presentation Document (Présentation TIPE - GINESTE Pierre.pdf)](Présentation TIPE - GINESTE Pierre.pdf)[cite: 66, 156, 177, 241].
+### Context and Objectives
+The rise of urban delivery leads to increased pollution and traffic congestion. Automated drone delivery is a promising alternative. Since the delivery order depends on how packages are arranged under the drone, the main question is: **In what order should they be delivered to minimize energy consumption?**
 
-### ⚙️ How It Works
+### Physics Model and Algorithms
 
-#### 1. Physics Model
-[cite_start]We estimate the drone's power consumption based on the load it carries[cite: 40]. [cite_start]The calculation relies on **Rankine's perfect propeller model**[cite: 99, 124].
-* [cite_start]By equating the power supplied by the propeller to the kinetic energy gained by the air, we determine the power required for flight: $P = \sqrt{(mg/4)^3 / (2\pi\rho R^2)}$[cite: 428, 429].
-* [cite_start]We assume a constant flight speed of 10 m/s (40 km/h)[cite: 332, 806].
+#### 1. Physics Modeling
+The energy cost calculation considers the direct impact of the packages' mass on the power required by the motors.
+* The study is based on **Rankine's ideal propeller model** and Bernoulli's principle.
+* The power $P$ required for hovering or constant-speed flight is calculated using the total mass and the propeller radius.
+* Total energy is estimated by integrating this power over the flight duration, assuming a constant speed of 40 km/h.
 
-#### 2. Pathfinding Algorithms
-[cite_start]To calculate the optimal delivery sequence, the problem is divided into two steps based on **Bellman's principle of optimality**[cite: 39, 138]:
-1. [cite_start]**Dijkstra's Algorithm:** Used to extract the shortest paths between all delivery points using geographical graph data representing the streets of Toulouse (data from `data.gouv.fr`)[cite: 39, 158, 342, 629].
-2. **Traveling Salesperson Problem (TSP) Resolution:**
-   * **Exact approach (Brute Force):** Calculates the cost of all permutations. [cite_start]Feasible only for $n \le 12$ packages[cite: 219, 220].
-   * **Heuristic approach (Christofides):** Used for $n > 12$ packages. [cite_start]It uses a Minimum Spanning Tree and perfect matching to find a route in $O(n^3)$ complexity, resulting in a path approximately 15% longer than the absolute minimum but computed in reasonable time[cite: 236, 239].
+#### 2. Pathfinding Implementation
+Based on Bellman's principle of optimality, the problem is divided into two phases:
+1. **Generating the complete graph (Dijkstra's Algorithm):** Geographical coordinates of Toulouse's roads are imported from a dataset. Dijkstra is used to find the shortest paths between every pair of delivery points.
+2. **Finding the optimal tour:**
+   * **Exact Resolution (Brute Force):** Calculates the energy cost of all possible permutations. Unfeasible for $n > 12$ packages.
+   * **Christofides Heuristic:** Used for larger deliveries. This algorithm (based on a minimum spanning tree and perfect matching) has an $O(n^3)$ complexity. The resulting path is on average 15% longer than the absolute optimal path but can be computed incredibly faster.
+
+### Results
+A real-world experiment with a drone lifting varying weights (20g to 120g) validated the physical model, showing a strong correlation between simulated and measured energy expenditure. Furthermore, the study shows that in one hour, a drone consumes roughly 1 kWh to deliver 30 packages, compared to 20 kWh for a traditional truck delivering 15 packages.
 
 ---
 
-## 🇫🇷 Version Française
+## Version Française
 
-# Drone Livreur de Colis : Recherche d'un chemin optimal énergétique 🚁📦
+# Drone livreur de colis, recherche d'un chemin optimal
 
-[cite_start]Ce dépôt héberge le code source et les recherches développés dans le cadre d'un TIPE de CPGE MP[cite: 7]. [cite_start]Le but de ce projet est de déterminer le trajet impliquant une consommation énergétique minimale pour un drone livrant un certain nombre de colis dans une ville[cite: 45].
+Ce dépôt héberge le code source et les recherches développés dans le cadre d'un TIPE de CPGE MP. Le but de ce projet est de déterminer le trajet impliquant une consommation énergétique minimale pour un drone livrant un certain nombre de colis dans une ville.
 
-> [cite_start]📚 **Pour plus de contexte et d'informations théoriques :** Veuillez consulter le document [MCOT](MCOT_48955_34278.pdf) qui détaille le positionnement thématique, la bibliographie complète et les enjeux réglementaires liés à l'espace aérien[cite: 10, 24, 36].
-> 
-> [cite_start]🖼️ **Pour accéder aux schémas et visualisations :** Le code ne générant pas nativement les images dans ce README, veuillez consulter le diaporama [Présentation TIPE](Présentation TIPE - GINESTE Pierre.pdf) pour visualiser le modèle physique du drone, les graphes de la ville de Toulouse et les différentes étapes de l'algorithme de Christofides[cite: 66, 156, 177, 241, 281].
+> **Note sur les visuels et le contexte :** Pour tous les schémas, le contexte théorique, les graphes de la ville de Toulouse et les étapes visuelles des algorithmes, veuillez vous référer à la présentation et au document MCOT joints.
 
-### 🎯 Problématique
-[cite_start]L'essor de la livraison urbaine engendre pollution et engorgement des routes[cite: 5]. [cite_start]La livraison par drones (expérimentée par des entreprises comme Wing ou DPD) est une alternative prometteuse[cite: 28, 29]. [cite_start]L'ordre de livraison étant défini par le placement des colis sous le drone, la question se pose : **Dans quel ordre les disposer pour effectuer le trajet le moins coûteux énergétiquement ?** [cite: 35]
+### Contexte et Objectifs
+L'essor de la livraison urbaine engendre pollution et engorgement des routes. La livraison par drones est une alternative prometteuse. L'ordre de livraison étant défini par le placement des colis sous le drone, la question principale est : **Dans quel ordre les livrer pour minimiser la consommation d'énergie ?**
 
-### 🔬 Fonctionnement et Modélisation
+### Modèle Physique et Algorithmes
 
 #### 1. Modélisation Physique
-[cite_start]Le calcul du coût énergétique prend en compte l'impact direct de la masse des colis sur la puissance demandée aux moteurs[cite: 40]. 
+Le calcul du coût énergétique prend en compte l'impact direct de la masse des colis sur la puissance demandée aux moteurs. 
+* L'étude s'appuie sur le **modèle de l'hélice de Rankine** et le théorème de Bernoulli.
+* La puissance $P$ nécessaire au vol stationnaire ou à vitesse constante est calculée en fonction de la masse totale et du rayon des hélices.
+* L'énergie totale est estimée en intégrant cette puissance sur la durée du vol, avec une vitesse constante supposée de 40 km/h.
+
+#### 2. Implémentation Algorithmique
+En s'appuyant sur le principe d'optimalité de Bellman, le problème est divisé en deux phases :
+1. **Génération du graphe complet (Algorithme de Dijkstra) :** Les coordonnées géographiques des routes de Toulouse sont importées depuis un jeu de données. Dijkstra est utilisé pour trouver les plus courts chemins entre chaque paire de points de livraison.
+2. **Recherche de la tournée optimale :**
+   * **Résolution exacte (Force Brute) :** Calcule le coût énergétique de toutes les permutations possibles. Inenvisageable pour $n > 12$ colis.
+   * **Heuristique de Christofides :** Utilisée pour les livraisons plus importantes. Cet algorithme (basé sur un arbre couvrant de poids minimal et un couplage parfait) offre une complexité en $O(n^3)$. Le trajet obtenu est en moyenne 15% plus long que le trajet optimal absolu, mais se calcule infiniment plus vite.
+
+### Résultats
+Une expérience en conditions réelles avec un drone soulevant différentes masses (20g à 120g) a validé le modèle physique, montrant une forte corrélation entre la dépense énergétique simulée et celle mesurée. De plus, l'étude montre qu'en une heure, un drone consomme environ 1 kWh pour livrer 30 colis, contre 20 kWh pour un camion classique livrant 15 colis.[cite_start]Le calcul du coût énergétique prend en compte l'impact direct de la masse des colis sur la puissance demandée aux moteurs[cite: 40]. 
 * [cite_start]L'étude s'appuie sur le **modèle de l'hélice de Rankine** et le théorème de Bernoulli[cite: 99, 403].
 * [cite_start]La puissance $P$ nécessaire au vol stationnaire ou à vitesse constante est donnée par $P = \sqrt{\frac{(\frac{mg}{4})^3}{2\pi\rho R^2}}$[cite: 126, 429].
 * [cite_start]L'énergie totale est calculée en intégrant cette puissance sur la durée du trajet, à une vitesse supposée constante de $40\text{ km/h}$[cite: 332].
@@ -55,10 +70,10 @@
    * **Force brute par permutations :** Calcul du coût énergétique de tous les chemins possibles. [cite_start]Totalement inenvisageable pour un nombre de colis $n > 12$[cite: 219, 220]. 
    * **Heuristique de Christofides :** Pour les livraisons plus massives ($n > 12$), nous approchons le chemin parfait. [cite_start]L'algorithme (basé sur un arbre couvrant de poids minimal et un couplage parfait des sommets de degré impair) offre une complexité en $O(n^3)$[cite: 236, 239, 432]. [cite_start]Le chemin est en moyenne 15% plus long que le chemin optimal strict, mais calculable très rapidement[cite: 239].
 
-### 📊 Résultats et Expérience
+### Résultats et Expérience
 [cite_start]Une expérience en conditions réelles avec un drone (type Mavic) soulevant des masses allant de 20g à 120g a été menée pour valider le modèle[cite: 283, 284]. [cite_start]Les résultats montrent une corrélation forte entre la dépense énergétique simulée et celle mesurée sur le terrain[cite: 289, 310, 311]. [cite_start]De plus, le bilan montre qu'à l'heure, un drone consomme environ 1 kWh pour 30 colis livrés, contre 20 kWh pour 15 colis avec un camion de livraison classique[cite: 314].
 
-### 📚 Sources Principales
+### Sources Principales
 * [cite_start]R. Bellman, *Dynamic Programming* (1957) [cite: 61]
 * [cite_start]E.W. Dijkstra, *A short introduction to the art of programming* [cite: 62]
 * [cite_start]Historique et droit : Encyclopaedia Universalis & A. Cassart [cite: 53, 58]
