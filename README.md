@@ -1,4 +1,4 @@
-# Energy-Optimal Drone Delivery Routing 🚁📦
+# Energy-Optimal Drone Delivery Routing
 
 ## English Version
 
@@ -56,26 +56,26 @@ En s'appuyant sur le principe d'optimalité de Bellman, le problème est divisé
    * **Heuristique de Christofides :** Utilisée pour les livraisons plus importantes. Cet algorithme (basé sur un arbre couvrant de poids minimal et un couplage parfait) offre une complexité en $O(n^3)$. Le trajet obtenu est en moyenne 15% plus long que le trajet optimal absolu, mais se calcule infiniment plus vite.
 
 ### Résultats
-Une expérience en conditions réelles avec un drone soulevant différentes masses (20g à 120g) a validé le modèle physique, montrant une forte corrélation entre la dépense énergétique simulée et celle mesurée. De plus, l'étude montre qu'en une heure, un drone consomme environ 1 kWh pour livrer 30 colis, contre 20 kWh pour un camion classique livrant 15 colis.[cite_start]Le calcul du coût énergétique prend en compte l'impact direct de la masse des colis sur la puissance demandée aux moteurs[cite: 40]. 
-* [cite_start]L'étude s'appuie sur le **modèle de l'hélice de Rankine** et le théorème de Bernoulli[cite: 99, 403].
-* [cite_start]La puissance $P$ nécessaire au vol stationnaire ou à vitesse constante est donnée par $P = \sqrt{\frac{(\frac{mg}{4})^3}{2\pi\rho R^2}}$[cite: 126, 429].
-* [cite_start]L'énergie totale est calculée en intégrant cette puissance sur la durée du trajet, à une vitesse supposée constante de $40\text{ km/h}$[cite: 332].
+Une expérience en conditions réelles avec un drone soulevant différentes masses (20g à 120g) a validé le modèle physique, montrant une forte corrélation entre la dépense énergétique simulée et celle mesurée. De plus, l'étude montre qu'en une heure, un drone consomme environ 1 kWh pour livrer 30 colis, contre 20 kWh pour un camion classique livrant 15 colisLe calcul du coût énergétique prend en compte l'impact direct de la masse des colis sur la puissance demandée aux moteurs. 
+* L'étude s'appuie sur le **modèle de l'hélice de Rankine** et le théorème de Bernoulli.
+* La puissance $P$ nécessaire au vol stationnaire ou à vitesse constante est donnée par $P = \sqrt{\frac{(\frac{mg}{4})^3}{2\pi\rho R^2}}$.
+* L'énergie totale est calculée en intégrant cette puissance sur la durée du trajet, à une vitesse supposée constante de $40\text{ km/h}$.
 
 #### 2. Implémentation Algorithmique
-[cite_start]Le problème est séparé en deux phases distinctes, en s'appuyant sur le principe d'optimalité de Bellman[cite: 39]:
+Le problème est séparé en deux phases distinctes, en s'appuyant sur le principe d'optimalité de Bellman:
 
-1. [cite_start]**Génération du graphe complet (Algorithme de Dijkstra) :** Les coordonnées des routes de Toulouse sont importées depuis un fichier `.csv` (`data.gouv.fr`)[cite: 342, 603]. [cite_start]Dijkstra est appliqué pour trouver les plus courts chemins reliant chaque paire de points de livraison[cite: 48, 158].
+1. **Génération du graphe complet (Algorithme de Dijkstra) :** Les coordonnées des routes de Toulouse sont importées depuis un fichier `.csv` (`data.gouv.fr`). Dijkstra est appliqué pour trouver les plus courts chemins reliant chaque paire de points de livraison.
 
 2. **Recherche de la tournée optimale :**
-   * **Force brute par permutations :** Calcul du coût énergétique de tous les chemins possibles. [cite_start]Totalement inenvisageable pour un nombre de colis $n > 12$[cite: 219, 220]. 
-   * **Heuristique de Christofides :** Pour les livraisons plus massives ($n > 12$), nous approchons le chemin parfait. [cite_start]L'algorithme (basé sur un arbre couvrant de poids minimal et un couplage parfait des sommets de degré impair) offre une complexité en $O(n^3)$[cite: 236, 239, 432]. [cite_start]Le chemin est en moyenne 15% plus long que le chemin optimal strict, mais calculable très rapidement[cite: 239].
+   * **Force brute par permutations :** Calcul du coût énergétique de tous les chemins possibles. Totalement inenvisageable pour un nombre de colis $n > 12$. 
+   * **Heuristique de Christofides :** Pour les livraisons plus massives ($n > 12$), nous approchons le chemin parfait. L'algorithme (basé sur un arbre couvrant de poids minimal et un couplage parfait des sommets de degré impair) offre une complexité en $O(n^3)$. Le chemin est en moyenne 15% plus long que le chemin optimal strict, mais calculable très rapidement.
 
 ### Résultats et Expérience
-[cite_start]Une expérience en conditions réelles avec un drone (type Mavic) soulevant des masses allant de 20g à 120g a été menée pour valider le modèle[cite: 283, 284]. [cite_start]Les résultats montrent une corrélation forte entre la dépense énergétique simulée et celle mesurée sur le terrain[cite: 289, 310, 311]. [cite_start]De plus, le bilan montre qu'à l'heure, un drone consomme environ 1 kWh pour 30 colis livrés, contre 20 kWh pour 15 colis avec un camion de livraison classique[cite: 314].
+Une expérience en conditions réelles avec un drone (type Mavic) soulevant des masses allant de 20g à 120g a été menée pour valider le modèle. Les résultats montrent une corrélation forte entre la dépense énergétique simulée et celle mesurée sur le terrain. De plus, le bilan montre qu'à l'heure, un drone consomme environ 1 kWh pour 30 colis livrés, contre 20 kWh pour 15 colis avec un camion de livraison classique.
 
 ### Sources Principales
-* [cite_start]R. Bellman, *Dynamic Programming* (1957) [cite: 61]
-* [cite_start]E.W. Dijkstra, *A short introduction to the art of programming* [cite: 62]
-* [cite_start]Historique et droit : Encyclopaedia Universalis & A. Cassart [cite: 53, 58]
-* [cite_start]Données géographiques : data.gouv.fr / module Python `NetworkX` [cite: 342, 518]
+* R. Bellman, *Dynamic Programming* (1957)
+* E.W. Dijkstra, *A short introduction to the art of programming*
+* Historique et droit : Encyclopaedia Universalis & A. Cassart
+* Données géographiques : data.gouv.fr / module Python `NetworkX`
 *(La liste exhaustive est disponible dans le MCOT joint au projet).*
