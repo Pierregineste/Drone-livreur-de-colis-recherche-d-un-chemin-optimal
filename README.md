@@ -79,3 +79,5 @@ Une expérience en conditions réelles avec un drone (type Mavic) soulevant des 
 * Historique et droit : Encyclopaedia Universalis & A. Cassart
 * Données géographiques : data.gouv.fr / module Python `NetworkX`
 *(La liste exhaustive est disponible dans le MCOT joint au projet).*
+
+Ce travail a été réalisé en collaboration avec Baptiste Nègre et Lucas Steunou.
