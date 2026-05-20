@@ -80,4 +80,4 @@ Une expérience en conditions réelles avec un drone (type Mavic) soulevant des 
 * Données géographiques : data.gouv.fr / module Python `NetworkX`
 *(La liste exhaustive est disponible dans le MCOT joint au projet).*
 
-Ce travail a été réalisé en collaboration avec Baptiste Nègre et Lucas Steunou.
+Ce travail a été réalisé en collaboration avec Baptiste Nègre et Lucas Steunou durant l'année scolaire 2022/2023.
